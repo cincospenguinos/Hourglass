@@ -9,7 +9,8 @@ describe Hourglass::Extraction do
 
   describe '#used_methods' do
     it 'contains methods used in a single class' do
-      expect(simple_extraction.used_methods).to eq(%i[a_private_method access_me=])
+      used = %i[a_private_method access_me=]
+      expect(simple_extraction.used_methods).to eq(used)
     end
   end
 end
