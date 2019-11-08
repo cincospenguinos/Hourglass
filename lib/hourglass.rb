@@ -1,5 +1,5 @@
-require "hourglass/version"
+require 'hourglass/version'
+require 'hourglass/sexp'
+require 'hourglass/extraction'
+require 'hourglass/method'
 
-module Hourglass
-  # Your code goes here...
-end

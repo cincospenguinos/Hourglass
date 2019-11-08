@@ -22,4 +22,14 @@ describe Hourglass::Method do
       expect(method.name).to eq(:writer_attr=)
     end
   end
+
+  describe 'from_expression' do
+    it 'returns a reader method and a writer method given attr_accessor' do
+      exp = Sexp.from_array([:call, nil, :attr_accessor, Sexp.from_array(%i(lit accessor_attr))])
+      method = Hourglass::Method.from_expression(exp)
+      expect(method.length).to eq(2)
+      expect(method[0].name).to eq(:accessor_attr)
+      expect(method[1].name).to eq(:accessor_attr=)
+    end
+  end
 end
