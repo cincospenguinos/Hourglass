@@ -9,7 +9,7 @@ class Sexp
     self[0] == :call
   end
 
-  def attrasgn?
+  def attrassgn?
     self[0] == :attrasgn
   end
 

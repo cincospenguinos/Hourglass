@@ -20,12 +20,18 @@ module Services
       methods = []
 
       expression.each do |exp|
-        next unless exp.is_a?(Sexp)
+        next unless valid_method_declaration?(exp)
 
         methods << Hourglass::Method.from_expression(exp)
       end
 
       methods.flatten
+    end
+
+    def valid_method_declaration?(expression)
+      expression.is_a?(Sexp) && (expression.method_definition? ||
+          expression.attribute_reader? || expression.attribute_writer? ||
+          expression.attribute_accessor?)
     end
 
     def extract_expressions_to_explore
