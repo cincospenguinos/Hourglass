@@ -26,12 +26,16 @@ module Hourglass
       end
 
       def methods
-        @methods ||= get_declarations
+        @methods ||= extract_declarations
+      end
+
+      def expressions_to_explore
+        @expressions_to_explore ||= extract_expressions_to_explore
       end
 
       private
 
-      def get_declarations
+      def extract_declarations
         methods = []
 
         expression.each do |exp|
@@ -42,20 +46,25 @@ module Hourglass
 
         methods.flatten
       end
+
+      def extract_expressions_to_explore
+        to_explore = []
+
+        expression.each_with_index do |exp, index|
+          next unless exp.is_a?(Sexp)
+
+          to_explore << index if exp.method_definition?
+        end
+
+        to_explore
+      end
     end
 
     def collect_methods
       collection = MethodCollection.new(expression)
       methods = collection.methods
-      to_explore = []
 
-      expression.each_with_index do |exp, index|
-        next unless exp.is_a?(Sexp)
-
-        to_explore << index if exp.method_definition?
-      end
-
-      to_explore.each do |index|
+      collection.expressions_to_explore.each do |index|
         method = expression[index]
         calls_in_method = method.select { |e| e.is_a?(Sexp) && (e.method_call? || e[0] == :attrasgn) }
 
