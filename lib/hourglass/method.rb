@@ -10,6 +10,7 @@ module Hourglass
 
     def initialize(expression)
       @name = expression[1] if expression.method_definition?
+      @name = expression[3][1] if expression.attribute_reader?
     end
   end
 end
