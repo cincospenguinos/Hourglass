@@ -15,5 +15,11 @@ describe Hourglass::Method do
       method = Hourglass::Method.new(exp)
       expect(method.name).to eq(:reader_attribute)
     end
+
+    it 'properly gathers a writer type' do
+      exp = Sexp.from_array([:call, nil, :attr_writer, Sexp.from_array(%i(lit writer_attr))])
+      method = Hourglass::Method.new(exp)
+      expect(method.name).to eq(:writer_attr=)
+    end
   end
 end
