@@ -5,16 +5,20 @@ class Sexp
     self[0] == :defn
   end
 
+  def method_call?
+    self[0] == :call
+  end
+
   def attribute_reader?
-    self[0] == :call && self[2] == :attr_reader
+    method_call? && self[2] == :attr_reader
   end
 
   def attribute_writer?
-    self[0] == :call && self[2] == :attr_writer
+    method_call? && self[2] == :attr_writer
   end
 
   def attribute_accessor?
-    self[0] == :call && self[2] == :attr_accessor
+    method_call? && self[2] == :attr_accessor
   end
 
   def attribute_name

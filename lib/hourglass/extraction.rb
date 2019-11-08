@@ -19,39 +19,32 @@ module Hourglass
     private
 
     def collect_methods
-      method_definitions = []
-      methods_to_explore = []
+      methods = []
+      to_explore = []
+
       expression.each_with_index do |exp, index|
         next unless exp.is_a?(Sexp)
-        # :call nil :attr_reader Sexp
-        # :call nil :attr_writer Sexp
-        # :call nil :attr_accessor Sexp
-        # :defn a_public_method *
-        # :call nil :private
-        if exp[0] == :defn
-          method_definitions << Method.new(exp)
-          methods_to_explore << index
-        # elsif exp[0] == :call && exp[2].to_s.include?('attr')
-        #   method_definitions << Method.new(exp[3][1])
-        end
+
+        methods << Method.from_expression(exp)
+        to_explore << index if exp.method_definition?
       end
 
-      used_methods = []
+      methods.flatten!
 
-      methods_to_explore.each do |index|
+      to_explore.each do |index|
         method = expression[index]
+        calls_in_method = method.select { |e| e.is_a?(Sexp) && (e.method_call? || e[0] == :attrasgn) }
 
-        method.select { |m| m.is_a?(Sexp) }.each do |contents|
-          next unless contents[0] == :call
+        calls_in_method.each do |contents|
+          name = contents[2]
 
-          if (index = method_definitions.map(&:name).index(contents[2]))
-            used_methods << method_definitions[index]
+          if (used_method_index = methods.map(&:name).index(name))
+            @used << methods[used_method_index]
           end
         end
       end
 
-      @used = used_methods
-      @unused = method_definitions - used_methods
+      @unused = methods - @unused
     end
   end
 end
