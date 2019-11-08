@@ -7,11 +7,18 @@ describe Hourglass::Method do
       method = Hourglass::Method.new(exp)
       expect(method.name).to eq(:some_method)
     end
+
+    it 'is not an attribute' do
+      exp = Sexp.from_array(%i[defn some_method])
+      method = Hourglass::Method.new(exp)
+      expect(method.attribute?).to be_falsey
+    end
   end
 
   context 'when provided an attribute definition' do
     it 'properly gathers a reader type' do
-      exp = Sexp.from_array([:call, nil, :attr_reader, Sexp.from_array(%i(lit reader_attribute))])
+      lit =  Sexp.from_array(%i[lit reader_attribute])
+      exp = Sexp.from_array([:call, nil, :attr_reader,lit])
       method = Hourglass::Method.new(exp)
       expect(method.name).to eq(:reader_attribute)
     end
@@ -20,6 +27,13 @@ describe Hourglass::Method do
       exp = Sexp.from_array([:call, nil, :attr_writer, Sexp.from_array(%i(lit writer_attr))])
       method = Hourglass::Method.new(exp)
       expect(method.name).to eq(:writer_attr=)
+    end
+
+    it 'indicates that it is an attribute' do
+      lit = Sexp.from_array(%i[lit something])
+      exp = Sexp.from_array([:call, nil, :attr_reader, lit])
+      method = Hourglass::Method.new(exp)
+      expect(method.attribute?).to be_truthy
     end
   end
 
