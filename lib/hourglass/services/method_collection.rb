@@ -17,12 +17,14 @@ module Services
     private
 
     def extract_declarations
+      class_name = nil
       methods = []
 
-      expression.each do |exp|
+      expression.each_with_index do |exp, index|
+        class_name = expression[index + 1].to_s if exp == :class
         next unless valid_method_declaration?(exp)
 
-        methods << Hourglass::Method.from_expression(exp)
+        methods << Hourglass::Method.from_expression(exp, class_name: class_name)
       end
 
       methods.flatten

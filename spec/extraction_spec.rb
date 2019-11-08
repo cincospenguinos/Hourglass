@@ -7,6 +7,13 @@ describe Hourglass::Extraction do
     Hourglass::Extraction.new(expression)
   }
 
+  it 'attaches the correct class to each method' do
+    extraction = simple_extraction
+    (extraction.used_methods + extraction.unused_methods).each do |method|
+      expect(method.class_name).to eq('SimpleClass')
+    end
+  end
+
   describe '#used_methods' do
     it 'contains methods used in a single class' do
       used = %i[a_private_method access_me=]

@@ -4,8 +4,8 @@ module Hourglass
   class Extraction
     attr_reader :expression
 
-    def initialize(symbolic_expression)
-      @expression = symbolic_expression
+    def initialize(file_expression)
+      @expression = file_expression
       @used = []
       @unused = []
 
