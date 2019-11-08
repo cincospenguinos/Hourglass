@@ -18,14 +18,40 @@ module Hourglass
 
     private
 
+    class MethodCollection
+      attr_reader :expression
+
+      def initialize(expression)
+        @expression = expression
+      end
+
+      def methods
+        @methods ||= get_declarations
+      end
+
+      private
+
+      def get_declarations
+        methods = []
+
+        expression.each do |exp|
+          next unless exp.is_a?(Sexp)
+
+          methods << Method.from_expression(exp)
+        end
+
+        methods
+      end
+    end
+
     def collect_methods
-      methods = []
+      collection = MethodCollection.new(expression)
+      methods = collection.methods
       to_explore = []
 
       expression.each_with_index do |exp, index|
         next unless exp.is_a?(Sexp)
 
-        methods << Method.from_expression(exp)
         to_explore << index if exp.method_definition?
       end
 
