@@ -65,10 +65,7 @@ module Hourglass
       methods = collection.methods
 
       collection.expressions_to_explore.each do |index|
-        method = expression[index]
-        calls_in_method = method.select { |e| e.is_a?(Sexp) && (e.method_call? || e[0] == :attrasgn) }
-
-        calls_in_method.each do |contents|
+        method_calls_in(expression[index]).each do |contents|
           name = contents[2]
 
           if (used_method_index = methods.map(&:name).index(name))
@@ -78,6 +75,10 @@ module Hourglass
       end
 
       @unused = methods - @unused
+    end
+
+    def method_calls_in(exp)
+      exp.select { |e| e.is_a?(Sexp) && (e.method_call? || e[0] == :attrasgn) }
     end
   end
 end
