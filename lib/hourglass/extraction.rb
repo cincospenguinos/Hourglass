@@ -40,7 +40,7 @@ module Hourglass
           methods << Method.from_expression(exp)
         end
 
-        methods
+        methods.flatten
       end
     end
 
@@ -54,8 +54,6 @@ module Hourglass
 
         to_explore << index if exp.method_definition?
       end
-
-      methods.flatten!
 
       to_explore.each do |index|
         method = expression[index]
