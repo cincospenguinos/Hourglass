@@ -78,7 +78,7 @@ module Hourglass
     end
 
     def method_calls_in(exp)
-      exp.select { |e| e.is_a?(Sexp) && (e.method_call? || e[0] == :attrasgn) }
+      exp.select { |e| e.is_a?(Sexp) && (e.method_call? || e.attrasgn?) }
     end
   end
 end

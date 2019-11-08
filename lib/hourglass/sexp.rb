@@ -9,6 +9,10 @@ class Sexp
     self[0] == :call
   end
 
+  def attrasgn?
+    self[0] == :attrasgn
+  end
+
   def attribute_reader?
     method_call? && self[2] == :attr_reader
   end
