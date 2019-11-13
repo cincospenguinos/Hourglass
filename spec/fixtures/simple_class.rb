@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SimpleClass
   attr_reader :read_me
   attr_writer :write_me

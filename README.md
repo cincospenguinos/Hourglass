@@ -39,6 +39,14 @@ intended to be a safe, welcoming space for collaboration, and contributors are e
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
+## TODO
+
+- [x] Detect unused methods inside a single class
+- [ ] Gather sets of files and indicate which are unused in a single class
+- [ ] CLI for usage
+- [ ] Configuration object
+- [ ] Detect used methods via reflection
+
 ## NOTES
 
 * Things I want:
